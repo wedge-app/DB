@@ -12,11 +12,11 @@ function registerUser(data) {
     return new Promise(function (resolve, reject) {
         var newUser = new User(data);
         bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(newUser.user_password, salt, (err, hash) => {
+            bcrypt.hash(newUser.pwd, salt, (err, hash) => {
                 if (err) {
                     reject(500);
                 }
-                newUser.user_password = hash;
+                newUser.pwd = hash;
                 newUser.save((err) => {
                     if (err) {
                         if (err.code == 11000) {
@@ -26,8 +26,10 @@ function registerUser(data) {
                         }
                     } else {
                         var newUserData = new UserData();
-                        newUserData.user_name = data.user_name;
-                        newUserData.user_email = data.user_email;
+                        newUserData.id = data.id;
+                        newUserData.pwd = data.pwd;
+                        newUserData.name = data.name;
+                        newUserData.tel = data.tel;
                         newUserData.save((err) => {
                             if (err) {
                                 reject(500);
@@ -64,21 +66,21 @@ function termsOfUse(email, data) {
 };
 
 //==== 최초 로그인인가 =========================
-function isFirstLogin(email) {
-    return new Promise(function (resolve, reject) {
-        UserData.findOne({
-            user_email: email
-        }).then(user => {
-            if (user.user_agreement.agreement_m == 0) {
-                resolve(201);
-            } else {
-                resolve(200);
-            }
-        }).catch((err) => {
-            reject(401);
-        });
-    });
-};
+// function isFirstLogin(email) {
+//     return new Promise(function (resolve, reject) {
+//         UserData.findOne({
+//             user_email: email
+//         }).then(user => {
+//             if (user.user_agreement.agreement_m == 0) {
+//                 resolve(201);
+//             } else {
+//                 resolve(200);
+//             }
+//         }).catch((err) => {
+//             reject(401);
+//         });
+//     });
+// };
 
 //==== 현재유저의 현재 비밀번호확인 ==============
 function checkUser(email, data) {

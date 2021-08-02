@@ -2,16 +2,14 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-    //    google: { // 구글 자동로그인 테스트
-    //        id: String,
-    //        token: String,
-    //        name: String
-    //    },
-    user_email: { // 이메일
+
+    id: { // 아이디
         type: String,
         unique: true
     },
-    user_password: String // 비밀번호
+    pwd: String, // 비밀번호
+    name: String, // 이름
+    tel: String // 전화번호
 });
 
 var User = mongoose.model('Users', userSchema);
